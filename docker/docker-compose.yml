@@ -413,11 +413,13 @@ services:
           "--no-verbose",
           "--tries=1",
           "--spider",
-          "http://vector:9001/health"
+          "http://localhost:8686/health"
         ]
       timeout: 5s
       interval: 5s
       retries: 3
+    ports:
+      - “8686:8686”
     volumes:
       - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
