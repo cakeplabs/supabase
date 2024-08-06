@@ -387,17 +387,12 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXP: ${JWT_EXPIRY}
     volumes:
-      - ./volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
-      # Must be superuser to create event trigger
-      - ./volumes/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
-      # Must be superuser to alter reserved role
-      - ./volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
-      # Initialize the database settings with JWT_SECRET and JWT_EXP
-      - ./volumes/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
-      # PGDATA directory is persisted between restarts
-      - ./volumes/db/data:/var/lib/postgresql/data:Z
-      # Changes required for Analytics support
-      - ./volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
+      - '/data/coolify/applications/b4ggkcg/volumes/db/realtime.real.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z'
+      - '/data/coolify/applications/b4ggkcg/volumes/db/webhooks.real.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z'
+      - '/data/coolify/applications/b4ggkcg/volumes/db/roles.real.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z'
+      - '/data/coolify/applications/b4ggkcg/volumes/db/jwt.real.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z'
+      - '/data/coolify/applications/b4ggkcg/volumes/db/data:/var/lib/postgresql/data:Z'
+      - '/data/coolify/applications/b4ggkcg/volumes/db/logs.real.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z'
       # Use named volume to persist pgsodium decryption key between restarts
       - db-config:/etc/postgresql-custom
 
@@ -421,7 +416,7 @@ services:
     ports:
       - "8686:8686"
     volumes:
-      - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro
+      - ./volumes/logs/vector.conf.yml:/etc/vector/vector.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
